@@ -1,0 +1,21 @@
+package main
+
+func fn() (i int, err autoerr) {
+	a, err := fn1()
+	{
+		c, err := fn2()
+		if err != nil {
+			err = errors.Wrap(err, "fn `fn` failed at a.go:6 when invoking `fn2`")
+			return
+		}
+
+	}
+	if err != nil {
+	}
+	b, err := fn3()
+	if err != nil {
+		err = errors.Wrap(err, "fn `fn` failed at a.go:9 when invoking `fn3`")
+		return
+	}
+
+}

@@ -1,0 +1,29 @@
+package main
+
+var fnLit = func() (i int, err autoerr) {
+	_, err := A(a)
+	if err != nil {
+		err = errors.Wrap(err, "fn `fnLit` failed at a.go:4 when invoking `A`"+fmt.Sprintf(" with arg0 = %v; ", a))
+		return
+	}
+
+	var inner = func() (err autoerr) {
+		_, err := B(b)
+		if err != nil {
+			err = errors.Wrap(err, "fn `inner` failed at a.go:6 when invoking `B`"+fmt.Sprintf(" with arg0 = %v; ", b))
+			return
+		}
+
+		var inner_er = func() (err autoerr) {
+			_, err := C.D(c, d)
+			if err != nil {
+				err = errors.Wrap(err, "fn `inner_er` failed at a.go:8 when invoking `C.D`"+fmt.Sprintf(" with arg0 = %v; arg1 = %v; ", c, d))
+				return
+			}
+
+			return
+		}
+		return
+	}
+	return
+}

@@ -1,0 +1,150 @@
+package g
+
+import (
+	"fmt"
+	"log"
+	"strconv"
+
+	"github.com/pkg/errors"
+)
+
+/*
+	自动生成
+	if err != nil{
+
+	}
+
+	特征
+		函数返回值里有 err
+		存在语句对变量 err 进行写操作 ，且下一行没有对 err 的判断
+*/
+func a1() (err error) {
+	_, err = strconv.Atoi("apple")
+	return
+}
+
+func a2() (err error) {
+	_, err = strconv.Atoi("apple")
+	/*>>*/ if err != nil {
+		err = errors.Wrap(err, "func `a2` failed")
+		return
+	}
+	return
+}
+
+/*
+	类型转换自动 check
+*/
+var check bool
+
+func aa1() (err error) {
+	var aa interface{} = 111
+	_, check = aa.(int)
+	return
+}
+func aa2() (err error) {
+	var aa interface{} = 111
+	_, ok := aa.(int)
+	/*>>*/ if ok {
+
+	}
+	return
+}
+
+/*
+	自动生成 log
+
+	特征
+		使用绑定函数
+
+		logAtStart:
+			函数开始
+		logArErr
+			函数退出，在 if err 中
+		logAtRecover
+
+	打印值
+		函数名
+		位置（行号）
+		函数入参
+		栈信息
+
+*/
+func A(o ...interface{}) func(plugin ...interface{}) struct{} {
+	return func(plugin ...interface{}) struct{} {
+		return struct{}{}
+	}
+}
+
+func logPlugin() {
+}
+
+// 业务代码
+func b1(arg0, arg1 string) (err error) {
+	fmt.Println("biz")
+	_, err = strconv.Atoi("apple")
+	return
+}
+
+var _ = A(b1)(logPlugin) // 绑定 log
+
+// gen output
+func b2(arg0, arg1 string) (err error) {
+	/*>>*/ log.Printf("func `b2`, arg0 = %s, arg1 = %s\n", arg0, arg1)
+	fmt.Println("biz")
+	_, err = strconv.Atoi("apple")
+	/*>>*/ if err != nil {
+		log.Printf("func `b2` invoke `strconv.Atoi` failed, line_number = %d, err = %v", 61, err)
+		return errors.Wrap(err, "func `b2` failed")
+	}
+	/*>>*/ log.Println("func b2() out")
+	return
+}
+
+/*
+	自动生成 recover
+
+	特征
+		使用 error 别名 saferror
+*/
+
+type saferror = error
+
+func c1() (err saferror) {
+	return
+}
+
+func c2() (err error) {
+	/*>>*/ defer func() {
+		if e := recover(); e != nil {
+			//
+			err = errors.New("")
+		}
+	}()
+	return
+}
+
+/*
+	自动生成 metrics
+	TODO
+*/
+
+func d1() {
+
+}
+
+func d2() {
+
+}
+
+/*
+	自动生成测试
+
+
+*/
+
+/*
+	自动生成 json tag
+
+
+*/

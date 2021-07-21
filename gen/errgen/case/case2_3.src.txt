@@ -1,0 +1,6 @@
+package main
+
+func fn() (i int, err autoerr) {
+	var a,err = fn1(args), fn2(args2)
+	return
+}

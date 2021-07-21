@@ -1,0 +1,7 @@
+package main
+
+func fn() (i int, err autoerr) {
+	a,err := func(args) (err autoerr) {
+		b,err := B()
+	}(args)
+}

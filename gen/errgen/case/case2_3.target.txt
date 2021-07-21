@@ -1,0 +1,11 @@
+package main
+
+func fn() (i int, err autoerr) {
+	var a, err = fn1(args), fn2(args2)
+	if err != nil {
+		err = errors.Wrap(err, "fn `fn` failed at a.go:4 when invoking `fn2`"+fmt.Sprintf(" with arg0 = %v; ", args2))
+		return
+	}
+
+	return
+}

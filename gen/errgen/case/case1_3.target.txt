@@ -1,0 +1,12 @@
+package main
+
+func fn() (i int, err autoerr) {
+	var a int
+	a, err = strconv.Atoi("abc")
+	if err != nil {
+		err = errors.Wrap(err, "fn `fn` failed at a.go:5 when invoking `strconv.Atoi`"+fmt.Sprintf(" with arg0 = %v; ", "abc"))
+		return
+	}
+
+	return
+}

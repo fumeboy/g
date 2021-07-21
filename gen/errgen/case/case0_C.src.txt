@@ -1,0 +1,14 @@
+package main
+
+var fnLit = func() (i int, err autoerr) {
+	_, err := A(a)
+	var inner = func() (err autoerr) {
+		_, err := B(b)
+		var inner_er = func() (err autoerr) {
+			_, err := C.D(c,d)
+			return
+		}
+		return
+	}
+	return
+}

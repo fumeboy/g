@@ -1,0 +1,6 @@
+package main
+
+func fn() (i int, err autoerr) {
+	var err = strconv.Atoi("abc")
+	return
+}

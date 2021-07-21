@@ -1,0 +1,10 @@
+package main
+
+func fn() (i int, err autoerr) {
+	a,err := fn1()
+	{
+		c,err := fn2()
+	}
+	if err != nil{}
+	b,err := fn3()
+}

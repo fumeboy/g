@@ -1,0 +1,96 @@
+
+group 0 函数匹配点
+	caseA = 函数声明
+	func fn() (i int, err autoerr) {
+		_, err := strconv.Atoi("abc")
+		return
+	}
+	caseB = 函数字面量
+	var fnLit = func() (err autoerr) {
+		_, err := strconv.Atoi("a")
+		return
+	}
+	caseC = 函数体内部的函数字面量
+	var fnLit = func() (i int, err autoerr) {
+		_, err := A(a)
+		var inner = func() (err autoerr) {
+		_, err := B(b)
+		var inner_er = func() (err autoerr) {
+			_, err := C.D(c,d)
+			return
+		}
+		return
+		}
+		return
+	}
+	caseD = 方法
+	func (r receiver) mth() (err autoerr) {
+		_, err := strconv.Etoi(e)
+		return
+	}
+
+	caseE = 匿名函数
+	func init(){
+		err := func()(err autoerr){
+		_, err := Gtoi(g)
+		}()
+	}
+
+
+group 1 stmt AssignStmt:
+	case1
+	a,err := fn(args)
+	...(no if err)
+
+	case2
+	err := fn(args)
+	...(no if err)
+
+	case3
+	a,err = fn(args)
+	...(no if err)
+
+	case4
+	a,err := fn1(args), fn2(args2)
+	...(no if err)
+
+
+group 2 stmt DeclStmt:
+	case1
+	var a,err = fn(args)
+	...(no if err)
+
+	case2
+	var err = fn(args)
+	...(no if err)
+
+	case3
+	var a,err = fn(args), fn2(args2)
+	...(no if err)
+
+group 3 with if
+	case1
+	a,err := fn(args)
+	if err != nil{}
+
+	case2
+	a,err := fn(args)
+	if err := fn2(); err != nil{}
+
+
+group 4 anonymous fn
+	case1
+	a,err := func(args) error {}(args)
+
+group 5 special case
+	case1
+	a,err := fn1()
+	{
+		if err != nil{}
+		c,err := fn2()
+	}
+	if err != nil{}
+	b,err := fn3()
+
+	这种跨block的情况不处理
+	只处理同时在一个block的 var err 、 if err

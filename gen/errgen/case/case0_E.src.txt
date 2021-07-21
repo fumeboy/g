@@ -1,0 +1,7 @@
+package main
+
+func init(){
+	err := func()(err autoerr){
+		_, err := Gtoi(g)
+	}()
+}

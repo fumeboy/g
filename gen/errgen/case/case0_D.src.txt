@@ -1,0 +1,6 @@
+package main
+
+func (r receiver) mth() (err autoerr) {
+	_, err := strconv.Etoi(e)
+	return
+}

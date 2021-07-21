@@ -1,0 +1,11 @@
+package main
+
+func (r receiver) mth() (err autoerr) {
+	_, err := strconv.Etoi(e)
+	if err != nil {
+		err = errors.Wrap(err, "fn `mth` failed at a.go:4 when invoking `strconv.Etoi`"+fmt.Sprintf(" with arg0 = %v; ", e))
+		return
+	}
+
+	return
+}
