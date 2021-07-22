@@ -1,0 +1,7 @@
+package main
+
+// comment
+func fn() (i int, err error) { // comment
+	_, err := strconv.Atoi("abc")
+	return
+}

@@ -1,0 +1,1 @@
+copy from github.com/google/wire

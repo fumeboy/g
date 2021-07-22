@@ -11,6 +11,6 @@ import (
 
 func TestGen(_ *testing.T) {
 	wd, _ := os.Getwd()
-	gg := g.G(wd, os.Environ(), "", nil)
+	gg := g.G(wd, os.Environ(), "", []string{"./..."})
 	gg.Gen(errgen.Gen, recovergen.Gen, wiregen.Gen)
 }

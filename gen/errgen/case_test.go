@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/andreyvit/diff"
 	"github.com/dave/dst/decorator"
+	"github.com/dave/dst/decorator/resolver/guess"
 	"go/token"
 	"io/ioutil"
 	"os"
@@ -48,7 +49,8 @@ func TestCase(t *testing.T) {
 			Edit("a.go", dec, file)
 
 			var buf = bytes.NewBuffer([]byte{})
-			if err := decorator.Fprint(buf, file); err != nil {
+			r := decorator.NewRestorerWithImports("main", guess.New())
+			if err := r.Fprint(buf, file); err != nil {
 				panic(err)
 			}
 			if strings.TrimSpace(string(bytes2)) != strings.TrimSpace(buf.String()) {
@@ -61,7 +63,7 @@ func TestCase(t *testing.T) {
 	}
 }
 
-func TestCase1(t *testing.T){ // should panic
+func TestCase1(t *testing.T){
 	var code = `
 package main
 
@@ -75,26 +77,53 @@ func fn() (i int, err autoerr) {
 	dec := decorator.NewDecorator(token.NewFileSet())
 	file, _ := dec.Parse(code)
 	Edit(filename, dec, file)
-	decorator.Print(file)
+	r := decorator.NewRestorerWithImports("main", guess.New())
+	r.Print(file)
 }
 
-func TestCaseWarn(t *testing.T){ // should panic
+func TestCaseWarn(t *testing.T){
 	var code = `
 package main
 
 func fn() (i int, err autoerr) {
-	a,err := fn1()
+	a,err := strconv.Atoi("abc")
 	{
 		if err != nil{}
-		c,err := fn2()
+		c,err := strconv.Atoi("abc")
 	}
 	if err != nil{}
-	b,err := fn3()
+	b,err := strconv.Atoi("abc")
+}
+`
+	var filename = "a.go"
+	dec := decorator.NewDecorator(token.NewFileSet())
+	file, _ := dec.Parse(code)
+	err := Edit(filename, dec, file)
+	fmt.Println(err)
+}
+
+func TestCaseWarn2(t *testing.T){
+	var code = `
+package main
+
+func fn() (i int, err autoerr) {
+	a,err := call(call1(), other_args)
 }
 `
 	var filename = "a.go"
 	dec := decorator.NewDecorator(token.NewFileSet())
 	file, _ := dec.Parse(code)
 	Edit(filename, dec, file)
-	decorator.Print(file)
+	r := decorator.NewRestorerWithImports("main", guess.New())
+	r.Print(file)
+
+	/*
+	上面的 src 将会生成得到下面这句
+
+	err = errors.Wrap(err, "fn `fn` failed at a.go:5 when invoking `call`"+fmt.Sprintf(" with arg0 = %v; arg1 = %v; ", call1(), other_args))
+
+	可以发现 call1() 被原封不动出现在了 err 里 。。这意味着 call1 会被调用两次，这是不应该的
+
+	后续考虑优化掉或者去掉打印 args
+	*/
 }

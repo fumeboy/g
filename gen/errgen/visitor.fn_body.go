@@ -38,7 +38,7 @@ func (v *funcBodyStmtVisitor) Visit(node dst.Node) dst.Visitor {
 			case *dst.AssignStmt:
 				s := sent.(*dst.AssignStmt)
 				for j, n := range s.Lhs {
-					if n.(*dst.Ident).Name == "err" {
+					if n2,ok := n.(*dst.Ident); ok && n2.Name == "err" {
 						if len(s.Rhs) > 1 {
 							err_call = s.Rhs[j]
 						} else {
@@ -80,10 +80,8 @@ func (v *funcBodyStmtVisitor) Visit(node dst.Node) dst.Visitor {
 		HIT:
 			if rv, ok := err_call.(*dst.CallExpr); ok {
 				switch rv.Fun.(type) {
-				case *dst.SelectorExpr:
+				case *dst.SelectorExpr, *dst.Ident:
 					err_call_fn_name = util.StringAST(v.dec.Ast.Nodes[rv.Fun])
-				case *dst.Ident:
-					err_call_fn_name = rv.Fun.(*dst.Ident).Name
 				case *dst.FuncLit:
 					err_call_fn_name = define.AnonymousFn
 				}

@@ -1,5 +1,7 @@
 package main
 
+import "github.com/pkg/errors"
+
 func fn() (i int, err autoerr) {
 	a, err := fn1()
 	{

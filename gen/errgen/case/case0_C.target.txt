@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+)
+
 var fnLit = func() (i int, err autoerr) {
 	_, err := A(a)
 	if err != nil {

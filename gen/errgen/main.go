@@ -2,9 +2,9 @@ package errgen
 
 import (
 	"fmt"
-	"github.com/fumeboy/g/util"
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
+	"github.com/fumeboy/g/util"
 	"github.com/pkg/errors"
 )
 

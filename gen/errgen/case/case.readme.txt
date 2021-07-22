@@ -36,6 +36,12 @@ group 0 函数匹配点
 		}()
 	}
 
+	caseF = 非目标函数
+	func fn() (i int, err error) {
+        _, err := strconv.Atoi("abc")
+        return
+    }
+
 
 group 1 stmt AssignStmt:
 	case1
@@ -83,7 +89,6 @@ group 4 anonymous fn
 	a,err := func(args) error {}(args)
 
 group 5 special case
-	case1
 	a,err := fn1()
 	{
 		if err != nil{}

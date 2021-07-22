@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+)
+
 func (r receiver) mth() (err autoerr) {
 	_, err := strconv.Etoi(e)
 	if err != nil {

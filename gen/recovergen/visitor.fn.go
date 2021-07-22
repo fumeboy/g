@@ -25,7 +25,7 @@ func (v *funcVisitor) Visit(node ast.Node) ast.Visitor {
 		fn := node.(*ast.FuncDecl)
 		if fn.Type.Results != nil && fn.Type.Results.List != nil{
 			for _, n := range fn.Type.Results.List {
-				if errTypeMatch(n.Type.(*ast.Ident).Name) {
+				if id,ok := n.Type.(*ast.Ident); ok && errTypeMatch(id.Name) {
 					for _, nn := range n.Names {
 						if nn.Name == "err" {
 							fn_name = fn.Name.Name
@@ -46,7 +46,7 @@ func (v *funcVisitor) Visit(node ast.Node) ast.Visitor {
 						v.funcLitVisited[v3] = struct{}{}
 						if v3.Type.Results != nil && v3.Type.Results.List != nil{
 							for _, n := range v3.Type.Results.List {
-								if errTypeMatch(n.Type.(*ast.Ident).Name) {
+								if id,ok := n.Type.(*ast.Ident); ok && errTypeMatch(id.Name){
 									for _, nn := range n.Names {
 										if nn.Name == "err" {
 											fn_name = s2.Names[i].Name
@@ -68,7 +68,7 @@ func (v *funcVisitor) Visit(node ast.Node) ast.Visitor {
 			v.funcLitVisited[fn] = struct{}{}
 			if fn.Type.Results != nil && fn.Type.Results.List != nil{
 				for _, n := range fn.Type.Results.List {
-					if errTypeMatch(n.Type.(*ast.Ident).Name) {
+					if id,ok := n.Type.(*ast.Ident); ok && errTypeMatch(id.Name) {
 						for _, nn := range n.Names {
 							if nn.Name == "err" {
 								fn_name = define.AnonymousFn
@@ -88,7 +88,7 @@ HIT:
 	ast.Walk(v2, target)
 	if !v2.recoverExsited{
 		// insert at func first line
-		temp, err := tempAST(tempString(fn_name, fn_type))
+		temp, err := tempAST(tempString(fn_name, fn_type), v.dec)
 		if err != nil{
 			v.err = err
 			return nil

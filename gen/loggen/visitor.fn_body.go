@@ -16,7 +16,6 @@ func (v *funcBodyStmtVisitor) Visit(node ast.Node) ast.Visitor {
 	case *ast.FuncDecl, *ast.FuncLit:
 		return nil
 	case *ast.IfStmt:
-		ast.Print(v.dec.Ast.Nodes[node])
 		return (*ifErrBlockVisitor)(v)
 	case *ast.ReturnStmt:
 		if _,ok := v.returnStmtVisited[node.(*ast.ReturnStmt)]; !ok{

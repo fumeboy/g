@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+)
+
 func fn() (i int, err autoerr) {
 	a, err := func(args) (err autoerr) {
 		b, err := B()

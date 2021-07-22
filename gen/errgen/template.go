@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
+	"github.com/dave/dst/decorator/resolver/goast"
+	"github.com/fumeboy/g/util"
+	"github.com/pkg/errors"
+	"go/token"
 	"strconv"
 	"strings"
-	"github.com/pkg/errors"
 )
 
 func tempString(filename string, fn_name string, line_number int, err_fn_name string, err_fn_args []string) string {
@@ -22,6 +25,7 @@ func tempString(filename string, fn_name string, line_number int, err_fn_name st
 	text += "	err = errors.Wrap(err, \"" + fmt.Sprintf("fn `%s` failed at %s:%d", fn_name, filename, line_number)
 	if err_fn_name != "" {
 		text += fmt.Sprintf(" when invoking `%s`\"", err_fn_name)
+		// 打印 args 的部分有风险，考虑优化或关闭
 		if len(err_fn_args) > 0 {
 			var text_arg = `+ fmt.Sprintf(" with `
 			var text_arg2 = []string{}
@@ -44,14 +48,23 @@ func tempAST(s string, dec *decorator.Decorator) (dst.Stmt, error) {
 	var code = `
 package main
 
+import (
+	"github.com/pkg/errors"
+	"fmt"
+)
+
 func a(){
 %s
 }
 `
 	var f = fmt.Sprintf(code, s)
-	a, err := dec.ParseFile("", f, 0)
+
+	dec2 := decorator.NewDecoratorWithImports(token.NewFileSet(), "main", goast.New())
+	file, err := dec2.Parse(f)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf("tempAST() 失败, code = `%s`", s))
 	}
-	return a.Decls[0].(*dst.FuncDecl).Body.List[0], nil
+
+	util.DecCopy(dec2, dec)
+	return file.Decls[1].(*dst.FuncDecl).Body.List[0], nil
 }

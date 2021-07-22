@@ -4,6 +4,8 @@ import (
 	"fmt"
 	ast "github.com/dave/dst"
 	"github.com/dave/dst/decorator"
+	"github.com/dave/dst/decorator/resolver/goast"
+	"github.com/fumeboy/g/util"
 	"github.com/pkg/errors"
 	"go/token"
 )
@@ -36,18 +38,27 @@ func tempString(fn_name string, typ *ast.FuncType) string {
 }()`, "`"+fn_name+"`", arg1, arg2)
 }
 
-func tempAST(s string) (ast.Stmt, error) {
+func tempAST(s string, dec *decorator.Decorator) (ast.Stmt, error) {
 	var code = `
 package main
+
+import (
+	"github.com/pkg/errors"
+	"fmt"
+)
 
 func a(){
 %s
 }
 `
 	var f = fmt.Sprintf(code, s)
-	a, err := decorator.ParseFile(token.NewFileSet(), "a.go", f, 0)
+
+	dec2 := decorator.NewDecoratorWithImports(token.NewFileSet(), "main", goast.New())
+	file, err := dec2.Parse(f)
 	if err != nil {
 		return nil, errors.Wrap(err, fmt.Sprintf("tempAST() 失败, code = `%s`", s))
 	}
-	return a.Decls[0].(*ast.FuncDecl).Body.List[0], nil
+
+	util.DecCopy(dec2, dec)
+	return file.Decls[1].(*ast.FuncDecl).Body.List[0], nil
 }
