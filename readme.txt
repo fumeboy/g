@@ -26,3 +26,9 @@ TODO
 将扫描项目下带有 // +build dev 标识的 go 文件
 
 并生成这些文件：`autoerr.gen.go`, `safeerr.gen.go`, `wire.gen.go`
+
+## 声明
+
+请勿直接用在生产环境
+
+需要使用请二次开发
