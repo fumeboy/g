@@ -2,6 +2,8 @@
 
 并自动带上错误位置和函数调用信息
 
+需要使用 (err autoerr) 进行函数标记
+
     package main
 
     func fn1() (i int, err autoerr) {

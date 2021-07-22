@@ -61,6 +61,23 @@ func TestCase(t *testing.T) {
 	}
 }
 
+func TestCase1(t *testing.T){ // should panic
+	var code = `
+package main
+
+func fn() (i int, err autoerr) {
+	a, err := strconv.Atoi("abc")
+
+	return
+}
+`
+	var filename = "a.go"
+	dec := decorator.NewDecorator(token.NewFileSet())
+	file, _ := dec.Parse(code)
+	Edit(filename, dec, file)
+	decorator.Print(file)
+}
+
 func TestCaseWarn(t *testing.T){ // should panic
 	var code = `
 package main

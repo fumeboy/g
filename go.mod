@@ -1,4 +1,4 @@
-module g
+module github.com/fumeboy/g
 
 go 1.16
 

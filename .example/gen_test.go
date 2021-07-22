@@ -1,10 +1,10 @@
 package example
 
 import (
-	"g"
-	"g/gen/errgen"
-	"g/gen/recovergen"
-	"g/gen/wiregen"
+	"github.com/fumeboy/g"
+	"github.com/fumeboy/g/gen/errgen"
+	"github.com/fumeboy/g/gen/recovergen"
+	"github.com/fumeboy/g/gen/wiregen"
 	"os"
 	"testing"
 )
