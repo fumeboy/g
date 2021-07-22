@@ -1,7 +1,7 @@
 package errgen
 
 import (
-	"g/define"
+	"github.com/fumeboy/g/define"
 	ast "github.com/dave/dst"
 )
 

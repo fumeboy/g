@@ -2,9 +2,9 @@ package errgen
 
 import (
 	"fmt"
-	"g/define"
-	"g/gen/errgen/utils"
-	"g/util"
+	"github.com/fumeboy/g/define"
+	"github.com/fumeboy/g/gen/errgen/utils"
+	"github.com/fumeboy/g/util"
 	"github.com/dave/dst"
 	"github.com/pkg/errors"
 	"go/token"

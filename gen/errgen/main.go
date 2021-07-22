@@ -2,7 +2,7 @@ package errgen
 
 import (
 	"fmt"
-	"g/util"
+	"github.com/fumeboy/g/util"
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 	"github.com/pkg/errors"
